@@ -51,9 +51,9 @@ pip install -v -e .
 
 # **准备工作**
 
-1.在“”下载预训练权重simmim_pretrain__swin_base__img192_window6__800ep.pth放在checkpoints文件夹下
+1.在“”下载预训练权重simmim_pretrain__swin_base__img192_window6__800ep.pth放在checkpoints（没有就新建一个）文件夹下
 
-2.将数据集放在data文件夹下
+2.将数据集放在data（没有就新建一个）文件夹下
 
 3.custom-tools/water_config.py中修改数据集路径
 
@@ -108,16 +108,16 @@ python ./custom-tools/0255_2_01.py '标签图片的路径'，例如对训练集�
 
 
 ```bash
-python ./custom-tools/0255_2_01.py '/data/waterdataset/train/lbl'
+python ./custom-tools/0255_2_01.py data/waterdataset/train/lbl
 ```
 
 对验证集、测试集的预处理，使用以下命令格式依次对验证集、测试集进行预处理：
 
-python ./custom-tools/pre_process.py '图片的路径' '对应的标签图片路径'，例如对训练集图片和标签进行预处理
+python ./custom-tools/pre_process.py '图片的路径' '对应的标签图片路径'，例如对验证集图片和标签进行预处理
 
 
 ```bash
-python ./custom-tools/pre_process.py '/data/waterdataset/val/img' '/data/waterdataset/val/lbl'
+python ./custom-tools/pre_process.py data/waterdataset/val/img data/waterdataset/val/lbl
 ```
 
 ## 训练
@@ -126,23 +126,17 @@ python ./custom-tools/pre_process.py '/data/waterdataset/val/img' '/data/waterda
 python ./custom-tools/train.py '配置文件'，例如
 
 ```bash
-python custom-tools/train.py 'custom-tools/water_cfg.py'
+python ./custom-tools/train.py custom-tools/water_cfg.py
 ```
 
-```bash
-python custom-tools/train.py checkpoints/night/cfg.py checkpoints/night/night.pth --eval mIoU --aug-test
-```
 
 ## 测试
 测试命令格式为:
-python ./custom-tools/train.py '配置文件' '权重文件' --eval mIoU，例如
+python ./custom-tools/test.py '配置文件' '权重文件' --eval mIoU，例如
+
 
 ```bash
-python custom-tools/train.py 'custom-tools/water_cfg.py'
-```
-
-```bash
-python custom-tools/train.py 'custom-tools/water_cfg.py' 'work_dirs/water_cfg/best_mIoU_iter.pth' --eval mIoU
+python ./custom-tools/test.py custom-tools/water_cfg.py work_dirs/water_cfg/best_mIoU_iter.pth --eval mIoU
 ```
 实际权重保存在work_dirs/water_cfg下，权重名按实际而定
 
