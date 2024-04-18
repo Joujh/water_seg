@@ -49,118 +49,100 @@ pip install -v -e .
 # Alternatively: python setup.py develop
 ```
 
-Your directory structure should resemble:
+
+# **准备工作**
+
+1.在“”下载预训练权重simmim_pretrain__swin_base__img192_window6__800ep.pth放在checkpoints文件夹下
+2.将数据集放在data文件夹下
+3.custom-tools/water_config.py中修改数据集路径
+
+第128行和155行data_root: data/waterdataset/train, data/waterdataset/train为训练集所在文件夹的路径, 可以根据实际数据集路径修改。该文件夹下只能存放图片。
+
+第182行data_root: data/waterdataset/val, data/waterdataset/val为验证集所在文件夹的路径, 可以根据实际数据集路径修改。该文件夹下只能存放图片。
+
+第205行data_root: data/waterdataset/test, data/waterdataset/test为训练集所在文件夹的路径, 可以根据实际数据集路径修改。该文件夹下只能存放图片。
+
+
+此时你的文件目录应该类似如下结构:
 
 ```plaintext
 .
 ├── checkpoints
-│   ├── night
-│   ├── night+day
 |   └── simmim_pretrain__swin_base__img192_window6__800ep.pth
 ├── custom
 ├── custom-tools
 │   ├── dist_test.sh
 │   ├── dist_train.sh
+│   ├── 0255_2_01.py
+│   ├── pre_process.py
+│   ├── swin2mmseg.py
+│   ├── water_cfg.py
 │   ├── test.py
 │   └── train.py
 ├── data
-│   ├── cityscapes
-│   │   ├── gtFine
-│   │   └── leftImg8bit
-│   └── nightcity-fine
+│   └── waterdataset
 │       ├── train
-│       └── val
+│       |    └── img
+│       |    └── lbl
+│       ├── val
+│       |    └── img
+│       |    └── lbl
+│       └── test
+│            └── img
+│            └── lbl
 ├── mmseg
+├── requirements
+├── work_dirs
 ├── readme.md
 ├── requirements.txt
 ├── setup.cfg
 └── setup.py
 ```
 
-## Testing
+## 数据集预处理
 
-Execute tests using:
+所有标签图片为0_1像素组成（包括训练集、验证集、测试集标签），如果是0_255像素组成的，使用以下命令格式完成像素的转换：
+
+python ./custom-tools/0255_2_01.py '标签图片的路径'，例如对训练集标签像素转换
+
 
 ```bash
-python custom-tools/test.py checkpoints/night/cfg.py checkpoints/night/night.pth --eval mIoU --aug-test
+python ./custom-tools/0255_2_01.py '/data/waterdataset/train/lbl'
 ```
 
-## Training
-1. Download pre-training weight from [Google Drive](https://drive.google.com/file/d/15zENvGjHlM71uKQ3d2FbljWPubtrPtjl/view).
-2. Convert it to MMSeg format using:
-    ```shell
-    python custom-tools/swin2mmseg.py </path/to/pretrain> checkpoints/simmim_pretrain__swin_base__img192_window6__800ep.pth
-    ```
-3. Start training with:
-    ```shell
-    python custom-tools/train.py </path/to/your/config>
-    # </path/to/your/config>：our config: checkpoints/night/cfg.py or checkpoints/night+day/cfg.py
-    ```
+对数据集图片（包括训练集、验证集、测试集）的预处理，使用以下命令格式进行预处理：
 
-## Results
+python ./custom-tools/pre_process.py '图片的路径' '对应的标签图片路径'，例如对训练集图片和标签进行预处理
 
-The table below summarizes our findings:
-
-| logs                                            | train dataset                  | validation dataset | mIoU |
-|-------------------------------------------------|--------------------------------|--------------------|------|
-| checkpoints/night/eval_multi_scale_20230801_162237.json | nightcity-fine                 | nightcity-fine     | 64.2 |
-| checkpoints/night+day/eval_multi_scale_20230809_170141.json | nightcity-fine + cityscapes    | nightcity-fine     | 64.9 |
-
-# Acknowledgements
-This dataset is refined based on the dataset of [NightCity](https://dmcv.sjtu.edu.cn/people/phd/tanxin/NightCity/index.html) by Xin Tan *et al.* and [NightLab](https://github.com/xdeng7/NightLab) by Xueqing Deng *et al.*.
-
-This project is based on the [mmsegmentation](https://github.com/open-mmlab/mmsegmentation.git).
-
-Pretraining checkpoint comes from the [SimMIM](https://github.com/microsoft/SimMIM).
-
-The annotation process was completed using [LabelMe](https://github.com/wkentaro/labelme.git).
-
-# **准备工作**
-
-在configs/data-sam-vit-t.yaml中修改测试数据集路径
-
-第34行root_path_1: data/val/img, data/val/img为测试图片所在文件夹的路径, 可以根据实际数据集路径修改。该文件夹下只能存放图片。
-
-第35行root_path_2: data/val/label, data/val/label为测试图片对应标签所在文件夹的路径, 可以根据实际数据集路径修改。该文件夹下只能存放图片。
-
-出现报错时，大概率是因为填写的测试图片路径存在问题，或者测试图片文件夹下存在其他文件
-
-测试命令：在当前目录下执行 --config后是配置文件路径 --model后是权重文件路径
 
 ```bash
-python test.py --config configs/data-sam-vit-t.yaml --model model.pth
+python ./custom-tools/pre_process.py '/data/waterdataset/train/img' '/data/waterdataset/train/lbl'
 ```
 
+## 训练
 
-
-# **分别在Ubuntu和Windows环境下测试**
-
-1.测试环境：Ubuntu20.04
-
-![testubuntu.png](./testubuntu.png)
-
-2.测试环境：Windows10
-
-![testwindows.png](./testwindows.png)
-
-**指标的值不同是因为使用的测试数据集不同**
-
-# **可视化**
-
-在当前环境安装依赖库
+训练命令格式为:
+python ./custom-tools/train.py '配置文件'，例如
 
 ```bash
-pip install gradio==3.45.2
+python custom-tools/train.py 'custom-tools/water_cfg.py'
 ```
-
-在当前项目路径下运行命令
 
 ```bash
-python app.py
+python custom-tools/train.py checkpoints/night/cfg.py checkpoints/night/night.pth --eval mIoU --aug-test
 ```
 
-在app.py的第60行,model_path = "model.pth"可以修改权重文件路径
+## 测试
+测试命令格式为:
+python ./custom-tools/train.py '配置文件' '权重文件' --eval mIoU，例如
 
-打开http://0.0.0.0:7579 ,可视化界面如下图
+```bash
+python custom-tools/train.py 'custom-tools/water_cfg.py'
+```
 
-![appsample.png](./appsample.png)
+```bash
+python custom-tools/train.py 'custom-tools/water_cfg.py' 'work_dirs/water_cfg/best_mIoU_iter.pth' --eval mIoU
+```
+实际权重保存在work_dirs/water_cfg下，权重名按实际而定
+
+
