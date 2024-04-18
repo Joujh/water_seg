@@ -1,67 +1,53 @@
-# DTP (Disentangle then Parse)
+# **环境配置**
 
-This repository implements a PyTorch re-implementation of the research paper: ["Disentangle then Parse: Night-time Semantic Segmentation with Illumination Disentanglement"](https://arxiv.org/abs/).
-
-![overview](https://github.com/w1oves/DTP/assets/54713447/d9725a14-7495-4740-ac0c-ed5597d45d20)
-
-## Dataset
-
-Nightcity-fine: Access the dataset via [Google Drive](https://drive.google.com/file/d/1Ilj99NMAmkZIPQcVOd6cJebnKXjJ-Sit/view?usp=drive_link).
-
-Cityscapes: Access the dataset via [cityscapes-dataset.com](https://www.cityscapes-dataset.com/downloads/).
-
-## Environment Setup
-
-Set up your environment with these steps:
+创建环境
 
 ```bash
-conda create -n dtp python=3.10
+conda create -n dtp python==3.10
+```
+
+激活环境
+
+```bash
 conda activate dtp
+```
+
+安装pytorch
+
+```bash
 conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvidia
 # Alternatively: pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu116
+```
+安装相关环境
+
+```bash
 pip install tensorboard
+```
+
+```bash
 pip install -U openmim
+```
+
+```bash
 mim install mmcv-full
+```
+
+```
+
+克隆仓库
+
+```bash
+git clone https://github.com/DaoCaoRenH/samwater.git
+```
+
+```bash
+cd water_seg
+```
+
+```bash
 pip install -v -e .
 # Alternatively: python setup.py develop
 ```
-
-## Preparation
-
-### Download and Organize
-
-1. Decompress the `nightcity-fine.zip` dataset and relocate it to `./data/nightcity-fine`.
-
-2. Download Cityscapes
-
-   1. [gtFine_trainvaltest.zip (241MB)](https://www.cityscapes-dataset.com/file-handling/?packageID=1) [[md5\]](https://www.cityscapes-dataset.com/md5-sum/?packageID=1) 
-
-   2. [gtCoarse.zip (1.3GB)](https://www.cityscapes-dataset.com/file-handling/?packageID=2) [[md5\]](https://www.cityscapes-dataset.com/md5-sum/?packageID=2)
-
-   3. [leftImg8bit_trainvaltest.zip (11GB)](https://www.cityscapes-dataset.com/file-handling/?packageID=3) [[md5\]](https://www.cityscapes-dataset.com/md5-sum/?packageID=3)
-
-   4. ```shell
-      git clone https://github.com/mcordts/cityscapesScripts.git
-      
-      pip install cityscapesscripts
-      ```
-
-   5. Extract all the above zip files and git repo into the `./data` folder
-
-   6. ```shell
-      vim cityscapesScripts/cityscapesscripts/preparation/createTrainIdLabelImgs.py 
-      
-      Add the next line of code after `import os`
-      os.envieron['CITYSCAPES_DATASET'] = "../../../"
-      
-      python cityscapesScripts/cityscapesscripts/preparation/createTrainIdLabelImgs.py
-      
-      mkdir cityscapes
-      
-      mv gtFine cityscapes && mv leftImg8bit cityscapes
-      ```
-
-3. Download the checkpoint from [Google Drive](https://drive.google.com/file/d/1g-32y3N3RGOOiCe7hfjJKmB2D70w0Nrp/view?usp=drive_link) and place it in `./checkpoints`.
 
 Your directory structure should resemble:
 
@@ -129,15 +115,52 @@ Pretraining checkpoint comes from the [SimMIM](https://github.com/microsoft/SimM
 
 The annotation process was completed using [LabelMe](https://github.com/wkentaro/labelme.git).
 
-# Citation
-If you find this code or data useful, please cite our paper
+# **准备工作**
+
+在configs/data-sam-vit-t.yaml中修改测试数据集路径
+
+第34行root_path_1: data/val/img, data/val/img为测试图片所在文件夹的路径, 可以根据实际数据集路径修改。该文件夹下只能存放图片。
+
+第35行root_path_2: data/val/label, data/val/label为测试图片对应标签所在文件夹的路径, 可以根据实际数据集路径修改。该文件夹下只能存放图片。
+
+出现报错时，大概率是因为填写的测试图片路径存在问题，或者测试图片文件夹下存在其他文件
+
+测试命令：在当前目录下执行 --config后是配置文件路径 --model后是权重文件路径
+
+```bash
+python test.py --config configs/data-sam-vit-t.yaml --model model.pth
 ```
-@InProceedings{Wei_2023_ICCV,
-    author    = {Wei, Zhixiang and Chen, Lin and Tu, Tao and Ling, Pengyang and Chen, Huaian and Jin, Yi},
-    title     = {Disentangle then Parse: Night-time Semantic Segmentation with Illumination Disentanglement},
-    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
-    month     = {October},
-    year      = {2023},
-    pages     = {21593-21603}
-}
+
+
+
+# **分别在Ubuntu和Windows环境下测试**
+
+1.测试环境：Ubuntu20.04
+
+![testubuntu.png](./testubuntu.png)
+
+2.测试环境：Windows10
+
+![testwindows.png](./testwindows.png)
+
+**指标的值不同是因为使用的测试数据集不同**
+
+# **可视化**
+
+在当前环境安装依赖库
+
+```bash
+pip install gradio==3.45.2
 ```
+
+在当前项目路径下运行命令
+
+```bash
+python app.py
+```
+
+在app.py的第60行,model_path = "model.pth"可以修改权重文件路径
+
+打开http://0.0.0.0:7579 ,可视化界面如下图
+
+![appsample.png](./appsample.png)
