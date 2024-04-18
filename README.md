@@ -32,7 +32,6 @@ pip install -U openmim
 mim install mmcv-full
 ```
 
-```
 
 克隆仓库
 
