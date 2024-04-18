@@ -1,0 +1,102 @@
+Metadata-Version: 2.1
+Name: mmsegmentation
+Version: 0.30.0
+Summary: Open MMLab Semantic Segmentation Toolbox and Benchmark
+Home-page: http://github.com/open-mmlab/mmsegmentation
+Author: MMSegmentation Contributors
+Author-email: openmmlab@gmail.com
+License: Apache License 2.0
+Keywords: computer vision,semantic segmentation
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Description-Content-Type: text/markdown
+Provides-Extra: all
+Provides-Extra: tests
+Provides-Extra: build
+Provides-Extra: optional
+Provides-Extra: mim
+
+## 配置环境
+
+Set up your environment with these steps:
+
+```bash
+conda create -n dtp python=3.10
+conda activate dtp
+conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvidia
+# Alternatively: pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu116
+pip install tensorboard
+pip install -U openmim
+mim install mmcv-full
+```
+## 克隆仓库
+
+```bash
+git clone https://github.com/Joujh/water_seg.git
+cd water_seg
+pip install -v -e .
+# Alternatively: python setup.py develop
+```
+
+## 准备工作
+1.从(https://www.alipan.com/t/BzROCF6tvmvHfScd3O50) 下载backbone预训练模型，放到checkpoints文件夹下面
+
+2.将准备好的道路积水数据集放到data文件夹下，根据实际数据集路径修改配置文件：custom-tools/water_cfg.py。其中128行和155行均为训练集路径，需要修改；验证集路径在182行，测试集路径在203行。
+
+3.例如积水数据集文件名为waterdataset此时你的文件夹结构应该是这样的:
+
+```plaintext
+.
+├── checkpoints
+|   └── simmim_pretrain__swin_base__img192_window6__800ep.pth
+├── custom
+├── custom-tools
+│   ├── dist_test.sh
+│   ├── dist_train.sh
+|   ├── water_cfg.py
+│   ├── test.py
+│   └── train.py
+├── data
+│   ├── waterdataset
+│   │   ├── train
+│   │   │     └── img
+│   │   │     └── lbl
+│   │   ├── val
+│   │   │     └── img
+│   │   │     └── lbl
+│   │   ├── test
+│   │   │     └── img
+│   │   │     └── lbl
+├── mmseg
+├── readme.md
+├── requirements.txt
+├── setup.cfg
+└── setup.py
+```
+
+4.数据集的图片名格式为xxxx.png，则其对应的label图片名格式应为xxxx_trainIds.png;并且label图片像素为0，1组成。在训练之前请确保这一点，否则可能会出现报错。
+
+5.正式训练前需要对测试集和验证集的图片预处理
+    ```bash
+    python ./custom-tools/pre_process.py
+    ```
+## 训练
+1. Start training with:
+    ```bash
+    python ./custom-tools/train.py custom-tools/water_cfg.py
+    ```
+## 测试
+
+Execute tests using:
+将best_mIoU_iter.pth修改为训练后实际最好的模型文件。
+```bash
+python work_dirs/water_cfg/water_cfg.py work_dirs/water_cfg/best_mIoU_iter.pth --eval mIoU --show-dir result
+```
+
+
