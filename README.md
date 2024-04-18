@@ -53,7 +53,9 @@ pip install -v -e .
 # **准备工作**
 
 1.在“”下载预训练权重simmim_pretrain__swin_base__img192_window6__800ep.pth放在checkpoints文件夹下
+
 2.将数据集放在data文件夹下
+
 3.custom-tools/water_config.py中修改数据集路径
 
 第128行和155行data_root: data/waterdataset/train, data/waterdataset/train为训练集所在文件夹的路径, 可以根据实际数据集路径修改。该文件夹下只能存放图片。
