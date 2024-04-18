@@ -37,7 +37,7 @@ mim install mmcv-full
 克隆仓库
 
 ```bash
-git clone https://github.com/DaoCaoRenH/samwater.git
+git clone https://github.com/Joujh/water_seg.git
 ```
 
 ```bash
