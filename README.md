@@ -51,7 +51,7 @@ pip install -v -e .
 
 # **准备工作**
 
-1.在“”下载预训练权重simmim_pretrain__swin_base__img192_window6__800ep.pth放在checkpoints（没有就新建一个）文件夹下
+1.在“”下载sewim-transformer权重simmim_pretrain__swin_base__img192_window6__800ep.pth和预训练权重day.pth放在checkpoints（没有就新建一个）文件夹下
 
 2.将数据集放在data（没有就新建一个）文件夹下
 
@@ -123,10 +123,10 @@ python ./custom-tools/pre_process.py data/waterdataset/val/img data/waterdataset
 ## 训练
 
 训练命令格式为:
-python ./custom-tools/train.py '配置文件'，例如
+python ./custom-tools/train.py '配置文件' --load-from '预训练权重'，例如
 
 ```bash
-python ./custom-tools/train.py custom-tools/water_cfg.py
+python ./custom-tools/train.py custom-tools/water_cfg.py --load-from checkpoints/day.pth
 ```
 
 
