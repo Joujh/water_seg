@@ -51,7 +51,7 @@ pip install -v -e .
 
 # **准备工作**
 
-1.在“”下载sewim-transformer权重simmim_pretrain__swin_base__img192_window6__800ep.pth和预训练权重day.pth放在checkpoints（没有就新建一个）文件夹下
+1.在[Google Drive](https://drive.google.com/drive/folders/1ftbH58jkMa9M8TA1su2WVh9ps-dN8C6l?usp=sharing)下载sewim-transformer权重simmim_pretrain__swin_base__img192_window6__800ep.pth放在checkpoints（没有就新建一个）文件夹下,将预训练权重day.pth放在custom-tools下
 
 2.将数据集放在data（没有就新建一个）文件夹下
 
@@ -74,6 +74,8 @@ pip install -v -e .
 ├── custom-tools
 │   ├── dist_test.sh
 │   ├── dist_train.sh
+│   ├── day.pth
+│   ├── app.py
 │   ├── 0255_2_01.py
 │   ├── pre_process.py
 │   ├── swin2mmseg.py
@@ -126,7 +128,7 @@ python ./custom-tools/pre_process.py data/waterdataset/val/img data/waterdataset
 python ./custom-tools/train.py '配置文件' --load-from '预训练权重'，例如
 
 ```bash
-python ./custom-tools/train.py custom-tools/water_cfg.py --load-from checkpoints/day.pth
+python ./custom-tools/train.py custom-tools/water_cfg.py --load-from custom-tools/day.pth
 ```
 
 
@@ -139,5 +141,27 @@ python ./custom-tools/test.py '配置文件' '权重文件' --eval mIoU，例如
 python ./custom-tools/test.py custom-tools/water_cfg.py work_dirs/water_cfg/best_mIoU_iter.pth --eval mIoU
 ```
 实际权重保存在work_dirs/water_cfg下，权重名按实际而定
+
+
+# **可视化**
+
+在当前环境安装依赖库
+
+```bash
+pip install gradio==3.45.2
+```
+
+在当前项目路径下运行命令
+
+```bash
+python custom-tools/app.py
+```
+
+在app.py的第59行,model_path = "day.pth"可以修改权重文件路径
+在app.py的第60行,cfg_path = 'water_cfg.py'可以修改模型配置文件路径
+
+打开http://0.0.0.0:7579 ,可视化界面如下图
+
+![appsample.png](./img/1.png)
 
 
