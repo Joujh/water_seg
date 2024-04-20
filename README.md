@@ -124,6 +124,8 @@ python ./custom-tools/pre_process.py data/waterdataset/val/img data/waterdataset
 
 ## 训练
 
+！！！注意，如果需要保存多次训练结果，需要自己再新建一个不同名的配置文件（以区分water_cfg.py）,训练日志以及权重保存在work_dirs下的与训练配置文件同名的文件夹下。
+
 训练命令格式为:
 python ./custom-tools/train.py '配置文件' --load-from '预训练权重'，例如
 
@@ -162,6 +164,5 @@ python custom-tools/app.py
 
 打开http://0.0.0.0:7579 ,可视化界面如下图
 
-![appsample.png](./img/1.png)
-
+![image]()
 
