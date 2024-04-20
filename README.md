@@ -61,7 +61,7 @@ pip install -v -e .
 
 第182行data_root: data/waterdataset/val, data/waterdataset/val为验证集所在文件夹的路径, 可以根据实际数据集路径修改。该文件夹下只能存放图片。
 
-第205行data_root: data/waterdataset/test, data/waterdataset/test为训练集所在文件夹的路径, 可以根据实际数据集路径修改。该文件夹下只能存放图片。
+第205行data_root: data/waterdataset/test, data/waterdataset/test为测试集所在文件夹的路径, 可以根据实际数据集路径修改。该文件夹下只能存放图片。
 
 
 此时你的文件目录应该类似如下结构:
@@ -164,5 +164,5 @@ python custom-tools/app.py
 
 打开http://0.0.0.0:7579 ,可视化界面如下图
 
-![image]()
+![image](https://github.com/Joujh/water_seg/blob/main/1.png)
 
