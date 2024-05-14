@@ -119,7 +119,7 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    samples_per_gpu=2,
+    samples_per_gpu=8,
     workers_per_gpu=2,
     train=dict(
         type='DTPDataset',
@@ -257,7 +257,7 @@ lr_config = dict(
 runner = dict(type='IterBasedRunner', max_iters=80000)
 checkpoint_config = dict(by_epoch=False, interval=16000, max_keep_ckpts=3)
 evaluation = dict(
-    interval=5000, metric='mIoU', pre_eval=True, save_best='mIoU')
+    interval=2000, metric='mIoU', pre_eval=True, save_best='mIoU')
 checkpoint_file = 'checkpoints/simmim_pretrain__swin_base__img192_window6__800ep.pth'
 fp16 = dict()
 find_unused_parameters = True
