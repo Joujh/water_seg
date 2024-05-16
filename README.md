@@ -51,7 +51,7 @@ pip install -v -e .
 
 # **准备工作**
 
-1.在[Google Drive](https://drive.google.com/drive/folders/1ftbH58jkMa9M8TA1su2WVh9ps-dN8C6l?usp=sharing)下载sewim-transformer权重simmim_pretrain__swin_base__img192_window6__800ep.pth放在checkpoints（没有就新建一个）文件夹下,将预训练权重day.pth放在custom-tools下
+1.在[Google Drive](https://drive.google.com/drive/folders/1ftbH58jkMa9M8TA1su2WVh9ps-dN8C6l?usp=sharing)下载swim-transformer权重simmim_pretrain__swin_base__img192_window6__800ep.pth放在checkpoints（没有就新建一个）文件夹下,将预训练权重day.pth放在custom-tools下
 
 2.将数据集放在data（没有就新建一个）文件夹下
 
